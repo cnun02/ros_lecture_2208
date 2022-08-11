@@ -44,7 +44,7 @@ class Joystick:
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('joy_f710', anonymous= False)
+        rospy.init_node('joy_xbox', anonymous= False)
 
         _joystick1 = Joystick()
         

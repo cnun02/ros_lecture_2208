@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="pkgName" default="pkg_joy"/>
+    <group ns="joystick">
+        <node name="joy_node" pkg="joy" type="joy_node" output="screen"/>
+        <node name="joy_cmd" pkg="$(arg pkgName)" type="modJoyCmd_mor.py" output="screen"/>
+        <node name="joy_morai_gear" pkg="$(arg pkgName)" type="modJoyGear_mor.py" output="screen"/>
+    </group>
+</launch>
