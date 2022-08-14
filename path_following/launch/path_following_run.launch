@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="path_following" type="path_following_01.py" name="path_following_node" output="screen"/>
+</launch>
+
+
