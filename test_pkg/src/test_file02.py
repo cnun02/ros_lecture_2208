@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 
-from winreg import QueryInfoKey
 import rospy as rp # ros python module 참조
 from std_msgs.msg import * # 사전 정의된 ros standard message의 모든 타입 참조
 from test_pkg.msg import myMsg

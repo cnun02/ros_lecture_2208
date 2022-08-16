@@ -5,7 +5,6 @@ import rospy
 from morai_msgs.msg import CtrlCmd, EgoVehicleStatus, EventInfo
 from morai_msgs.srv import MoraiEventCmdSrv
 import threading
-from enum import Enum
 
 class Joystick:
     def __init__(self):        

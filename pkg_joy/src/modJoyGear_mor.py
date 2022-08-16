@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from operator import ge
-from urllib import request
 import rospy
 import sys
 import os
@@ -20,9 +18,9 @@ class Gear(Enum):
 class Trans_gear():
     def __init__(self):
         rospy.init_node("gear",anonymous=False)
-        _joySub = rospy.get_param("/mgr/topicPub/joy")
-        _vehStateSub = rospy.get_param("/mgr/topicPub/vehState")
-        _moraiEventCmdSrv = rospy.get_param("/mgr/topicSrv/joySrv")
+        _joySub = "/joystick/joy"
+        _vehStateSub = "/Ego_topic"
+        _moraiEventCmdSrv = "/Service_MoraiEventCmd"
         # subscriber
         joy_sub = rospy.Subscriber(_joySub, Joy, self.joy_callback)
         Ego_status_sub = rospy.Subscriber(_vehStateSub, EgoVehicleStatus, self.ego_callback)
