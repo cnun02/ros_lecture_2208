@@ -25,6 +25,9 @@ class test():
 
         _srv_joyEnable = "/joy_enable"
 
+        _kp = rp.get_param("/path_following_node/kp")
+        _ki = rp.get_param("/path_following_node/ki")
+
         self.wayPoints_x = [0, 5, 5, 0]
         self.wayPoints_y = [0, 0, 5, 5]
 
@@ -37,12 +40,12 @@ class test():
 
         self.v_cmd = 0.3
 
-        self.Threshold_dist = 0.2
+        self.Threshold_dist = 1
 
         self.e_store = 0
 
-        self.kp = 1
-        self.ki = 0.01
+        self.kp = _kp
+        self.ki = _ki
 
         self.dt = 0.1
 
@@ -107,16 +110,45 @@ class test():
 
         while not rp.is_shutdown():
 
+            if self.bJoyEnable:
+                _ctrl_msg.linear.x = self.vertical_accel * 0.3
+                _ctrl_msg.angular.z = self.horizon_steer * 0.5
+                self.e_store = 0
+            else:
+                _v_cmd = self.v_cmd
 
+                _dist = math.sqrt(math.pow(self.wayPoints_x[_wpNum] - self.turtle_pos_x, 2) \
+                                + math.pow(self.wayPoints_y[_wpNum] - self.turtle_pos_y, 2))
 
+                if abs(_dist) < self.Threshold_dist:
+                    _wpNum = _wpNum + 1
+                    if _wpNum >= len(self.wayPoints_x):
+                        _wpNum = 0
 
+                _desAngle = math.atan2(self.wayPoints_y[_wpNum] - self.turtle_pos_y,\
+                                  self.wayPoints_x[_wpNum] - self.turtle_pos_x)
 
+                _desAngle = self.angleCheck(_desAngle)
 
+                _e_angle = _desAngle - self.turtle_heading_angle
 
+                _e_angle = self.angleCheck(_e_angle)
 
+                _p_term = self.kp * _e_angle
+                _i_term = self.ki * self.dt * self.e_store
 
+                _angleCmd = _p_term + _i_term
 
-            
+                _ctrl_msg.angular.z = _angleCmd
+                _ctrl_msg.linear.x = _v_cmd
+
+                self.e_store = self.e_store + _e_angle
+
+            _nTemp = _nTemp + 1
+
+            _myMsg.count = _nTemp
+            _myMsg.data = self.turtle_heading_angle
+            _myMsg.status = "good"
 
             self.command_pub.publish(_ctrl_msg)
             self.myMsg_pub.publish(_myMsg)
